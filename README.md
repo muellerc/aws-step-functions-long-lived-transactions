@@ -32,7 +32,7 @@ You are creating an e-commerce application and are processing an order. This req
 
 After you have successfully executed the [Setup](/docs/setup.md) step to get started, you deployed already all six Lambda functions which are necessary to implement our scenario. But the current workflow definition for our e-commerce application is far from complete:
 
-![Saga with Step Functions](docs/images/stepdiagram1.png)
+![Initial Step Functions](docs/images/stepdiagram1.png)
 
 ## Target
 
