@@ -6,7 +6,7 @@
     "ProcessOrder": {
       "Comment": "First transaction to create the order and set the order status to new",
       "Type": "Task",
-      "Resource": "${CreateOrderFunction.Arn}",
+      "Resource": "${OrderCreationFunction.Arn}",
       "TimeoutSeconds": 10,
       "Catch": [{
         "ErrorEquals": ["OrderCreationException"],

@@ -41,8 +41,8 @@ Resources:
 
 # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
 
-  # CreateOrderFunction represents task to create a new order and set status to "new order"
-  CreateOrderFunction:
+  # OrderCreationFunction represents task to create a new order and set status to "new order"
+  OrderCreationFunction:
     Type: AWS::Serverless::Function 
     Properties:
       CodeUri: ./order-creation/target/order-creation.jar
@@ -54,8 +54,8 @@ Resources:
         Variables:
           TABLE_NAME: !Ref OrdersTable
 
-  # CancelOrderFunction represents the compensating transaction to set order status to "pending"
-  CancelOrderFunction:
+  # OrderCancelationFunction represents the compensating transaction to set order status to "pending"
+  OrderCancelationFunction:
     Type: AWS::Serverless::Function 
     Properties:
       CodeUri: ./order-cancelation/target/order-cancelation.jar
@@ -67,8 +67,8 @@ Resources:
         Variables:
           TABLE_NAME: !Ref OrdersTable
 
-  # ProcessPaymentFunction
-  ProcessPaymentFunction:
+  # PaymentProcessFunction
+  PaymentProcessFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./payment-processing/target/payment-processing.jar
@@ -78,8 +78,8 @@ Resources:
         Variables:
           TABLE_NAME: !Ref PaymentsTable
 
-  # RefundPaymentFunction represents the compensating transaction to refund customer order
-  RefundPaymentFunction:
+  # PaymentRefundFunction represents the compensating transaction to refund customer order
+  PaymentRefundFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./payment-refund/target/payment-refund.jar
@@ -89,8 +89,8 @@ Resources:
         Variables:
           TABLE_NAME: !Ref PaymentsTable
   
-  # ReserveInventoryFunction represents task to reserve/remove order items from the inventory
-  ReserveInventoryFunction:
+  # InventoryReserveFunction represents task to reserve/remove order items from the inventory
+  InventoryReserveFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./inventory-reservation/target/inventory-reservation.jar
@@ -100,8 +100,8 @@ Resources:
         Variables:
           TABLE_NAME: !Ref InventoryTable
 
-  # ReleaseInventoryFunction represents the compensating transaction to reverses the changes to the inventory
-  ReleaseInventoryFunction:
+  # InventoryReleaseFunction represents the compensating transaction to reverses the changes to the inventory
+  InventoryReleaseFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./inventory-release/target/inventory-release.jar
@@ -316,12 +316,12 @@ Resources:
               Action:
                 - "lambda:InvokeFunction"
               Resource: 
-                - !Sub ${CreateOrderFunction.Arn}
-                - !Sub ${CancelOrderFunction.Arn}
-                - !Sub ${ProcessPaymentFunction.Arn}
-                - !Sub ${RefundPaymentFunction.Arn}
-                - !Sub ${ReserveInventoryFunction.Arn}
-                - !Sub ${ReleaseInventoryFunction.Arn}
+                - !Sub ${OrderCreationFunction.Arn}
+                - !Sub ${OrderCancelationFunction.Arn}
+                - !Sub ${PaymentProcessFunction.Arn}
+                - !Sub ${PaymentRefundFunction.Arn}
+                - !Sub ${InventoryReserveFunction.Arn}
+                - !Sub ${InventoryReleaseFunction.Arn}
         - PolicyName: "SqsServiceIntegration"
           PolicyDocument:
             Version: '2012-10-17'
@@ -426,47 +426,47 @@ Resources:
  #######   #######     ##    ##         #######     ##     ######  
 Outputs:
 
-  # CreateOrderFunction
-  CreateOrderFunctionArn:
+  # OrderCreationFunction
+  OrderCreationFunctionArn:
     Description: "Process Order Function ARN"
-    Value: !GetAtt CreateOrderFunction.Arn
+    Value: !GetAtt OrderCreationFunction.Arn
 
-  CreateOrderFunctionIamRole:
+  OrderCreationFunctionIamRole:
     Description: "Implicit IAM Role created for Process Order function"
-    Value: !GetAtt CreateOrderFunctionRole.Arn
+    Value: !GetAtt OrderCreationFunctionRole.Arn
   
-  # CancelOrderFunction
-  CancelOrderFunctionrn:
+  # OrderCancelationFunction
+  OrderCancelationFunctionrn:
     Description: "Process Order Update Function ARN"
-    Value: !GetAtt CancelOrderFunction.Arn
+    Value: !GetAtt OrderCancelationFunction.Arn
 
-  CancelOrderFunctionIamRole:
+  OrderCancelationFunctionIamRole:
     Description: "Implicit IAM Role created for Process Order function"
-    Value: !GetAtt CancelOrderFunctionRole.Arn
+    Value: !GetAtt OrderCancelationFunctionRole.Arn
 
-  # ProcessPaymentFunction
-  ProcessPaymentFunctionArn:
+  # PaymentProcessFunction
+  PaymentProcessFunctionArn:
     Description: "Process Payment Function ARN"
-    Value: !GetAtt ProcessPaymentFunction.Arn
+    Value: !GetAtt PaymentProcessFunction.Arn
 
-  # RefundPaymentFunction
-  RefundPaymentFunctionArn:
+  # PaymentRefundFunction
+  PaymentRefundFunctionArn:
     Description: "Process Payment Refund Function ARN"
-    Value: !GetAtt RefundPaymentFunction.Arn
+    Value: !GetAtt PaymentRefundFunction.Arn
 
   PaymentFunctionsIamRole:
     Description: "Implicit IAM Role created for payment functions"
     Value: !GetAtt PaymentFunctionsRole.Arn
 
-  # ReserveInventoryFunction
-  ReserveInventoryFunctionArn:
+  # InventoryReserveFunction
+  InventoryReserveFunctionArn:
     Description: "Reserve Inventory Function ARN"
-    Value: !GetAtt ReserveInventoryFunction.Arn
+    Value: !GetAtt InventoryReserveFunction.Arn
 
-  # ReleaseInventoryFunction
-  ReleaseInventoryFunctionFunctionArn:
+  # InventoryReleaseFunction
+  InventoryReleaseFunctionFunctionArn:
     Description: "Release Inventory Function ARN"
-    Value: !GetAtt ReleaseInventoryFunction.Arn
+    Value: !GetAtt InventoryReleaseFunction.Arn
 
   InventoryFunctionsIamRole:
     Description: "Implicit IAM Role created for inventory functions"
