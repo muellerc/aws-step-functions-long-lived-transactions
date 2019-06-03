@@ -20,8 +20,15 @@ This is a sample template for Managing Long Lived Transactions with AWS Step Fun
 |                           └── cmr
 |                               └── stepfunctions
 │                                   ├── Inventory.java
+│                                   ├── InventoryReleaseException.java
+│                                   ├── InventoryReservationException.java
+│                                   ├── Item.java
 │                                   ├── Order.java
+│                                   ├── OrderCancelationException.java
+│                                   ├── OrderCreationException.java
 |                                   └── Payment.java
+|                                   └── PaymentProcessException.java
+|                                   └── PaymentRefundException.java
 ├── inventory-reservation
 │   └── src
 |       └── main
@@ -51,7 +58,7 @@ This is a sample template for Managing Long Lived Transactions with AWS Step Fun
 |                       └── sample
 |                           └── cmr
 |                               └── stepfunctions
-|                                   └── OrderCreation.java        <-- Lambda function code represents task to create a new order and set status to "new order"
+|                                   └── OrderCreation.java      <-- Lambda function code represents task to create a new order and set status to "new order"
 ├── order-cancelation
 │   └── src
 |       └── main
@@ -61,7 +68,7 @@ This is a sample template for Managing Long Lived Transactions with AWS Step Fun
 |                       └── sample
 |                           └── cmr
 |                               └── stepfunctions
-|                                   └── OrderCancelation.java        <-- Lambda function code represents task to cancel an order
+|                                   └── OrderCancelation.java   <-- Lambda function code represents task to cancel an order
 ├── payment-processing
 │   └── src
 |       └── main
@@ -71,7 +78,7 @@ This is a sample template for Managing Long Lived Transactions with AWS Step Fun
 |                       └── sample
 |                           └── cmr
 |                               └── stepfunctions
-|                                   └── PaymentProcessing.java     <-- Lambda function code represents task to process financial transaction for the order
+|                                   └── PaymentProcessing.java  <-- Lambda function code represents task to process financial transaction for the order
 ├── payment-refund
 │   └── src
 |       └── main
@@ -100,9 +107,9 @@ The Task State (identified by "Type":"Task") causes the interpreter to execute t
 
 ```json
 "ProcessOrder": {
-  "Comment": "First transaction to save the order and set the order status to new",
+  "Comment": "First transaction to create the order and set the order status to new",
   "Type": "Task",
-  "Resource": "arn:aws:lambda:[REGION]:[ACCOUNT NUMBER]:function:aws-step-functions-long-lived-tra-NewOrderFunction-121DONKVIBL5T",
+  "Resource": "arn:aws:lambda:[REGION]:[ACCOUNT NUMBER]:function:[IDENTIFIER]",
   "TimeoutSeconds": 10,
   "Next": "ProcessPayment"
 }
@@ -114,9 +121,9 @@ Any state can encounter runtime errors. Errors can arise because of state machin
 ```json
 "Catch": [
   {
-    "ErrorEquals": ["ErrProcessOrder"],
+    "ErrorEquals": ["OrderCreationException"],
     "ResultPath": "$.error",
-    "Next": "UpdateOrderStatus"
+    "Next": "CancelOrder"
   }
 ]
 ```
@@ -134,7 +141,7 @@ When a	state reports an error, the interpreter scans through the Retriers and, w
   "BackoffRate": 2.0
   }],
   "Catch": [{
-    "ErrorEquals": ["ErrReleaseInventory"],
+    "ErrorEquals": ["InventoryReleaseException"],
     "ResultPath": "$.error",
     "Next": "ReleaseInventoryFailed"
   }
@@ -145,12 +152,12 @@ When a	state reports an error, the interpreter scans through the Retriers and, w
 
 The following is a list of all the custom errors thrown by the application and can be used in your state machine.
 
-* `ErrProcessOrder` represents a process order error
-* `ErrUpdateOrderStatus` represents a process order error
-* `ErrProcessPayment` represents a process payment error
-* `ErrProcessRefund` represents a process payment refund error
-* `ErrReserveInventory` represents a inventory update error
-* `ErrReleaseInventory` represents a inventory update reversal error
+* `OrderCreationException` represents a process order creation error
+* `OrderCancelationException` represents a process order cancellation error
+* `PaymentProcessException` represents a process payment error
+* `PaymentRefundException` represents a process payment refund error
+* `InventoryReservationException` represents a inventory update error
+* `InventoryReleaseException` represents a inventory update reversal error
 
 ## Testing Scenarios
 
@@ -158,12 +165,12 @@ The AWS Step Functions implementation has been configured for you to be easily t
 
 OrderID Prefix | Will error with | Example | Expected execution
 ------------ | ------------- | --- | ---
-1 | ErrProcessOrder | 1ae4501d-ed92-4b27-bf0e-fd978ed45127 | ![1](images/paths-breakdown-1.png) 
-11 | ErrUpdateOrderStatus | 11328abd-368d-43fd-bd4f-db15b5b63951 | ![11](images/paths-breakdown-11.png)
-2 | ErrProcessPayment |  20b0b599-441b-45c3-910e-ad63fe992c43 | ![2](images/paths-breakdown-2.png)
-22 | ErrProcessRefund | 222f741b-0292-4f93-a2f7-503f92486955 | ![22](images/paths-breakdown-22.png)
-3 | ErrReserveInventory | 3a7dc768-6f32-495d-a140-3d330c246f50 | ![3](images/paths-breakdown-3.png)
-33 | ErrReleaseInventory | 33a49007-a815-4079-9b9b-e30ae7eca11f | ![3](images/paths-breakdown-33.png)
+1 | OrderCreationException | 1ae4501d-ed92-4b27-bf0e-fd978ed45127 | ![1](images/paths-breakdown-1.png) 
+11 | OrderCancelationException | 11328abd-368d-43fd-bd4f-db15b5b63951 | ![11](images/paths-breakdown-11.png)
+2 | PaymentProcessException |  20b0b599-441b-45c3-910e-ad63fe992c43 | ![2](images/paths-breakdown-2.png)
+22 | PaymentRefundException | 222f741b-0292-4f93-a2f7-503f92486955 | ![22](images/paths-breakdown-22.png)
+3 | InventoryReservationException | 3a7dc768-6f32-495d-a140-3d330c246f50 | ![3](images/paths-breakdown-3.png)
+33 | InventoryReleaseException | 33a49007-a815-4079-9b9b-e30ae7eca11f | ![3](images/paths-breakdown-33.png)
 4-9 | No error | 47063fe3-56d9-4c51-b91f-71929834ce03 | ![4-9](images/paths-breakdown-7.png)
 
 ### Invoking your Step Function via CLI
