@@ -6,8 +6,8 @@ The easiest way to get started is to launch an AWS CloudFormation template that 
 
 Region| Launch
 ------|-----
-EU Central (Frankfurt) | [![Launch in eu-central-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-central-1#/stacks/create/review?stackName=saga-pattern-workshop&templateURL=https://s3.amazonaws.com/aws-step-functions-long-lived-transactions-us-east-1/builder-template.yaml)
-
+EU Central (Frankfurt) | [![Launch in eu-central-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-central-1#/stacks/create/review?stackName=aws-step-functions-workshop&templateURL=https://s3.amazonaws.com/aws-step-functions-workshop/cloud9.yaml)
+EU West (Dublin) | [![Launch in eu-west-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/create/review?stackName=aws-step-functions-workshop&templateURL=https://s3.amazonaws.com/aws-step-functions-workshop/cloud9.yaml)
 
 ### CloudFormation Setup Instructions
 
@@ -88,7 +88,7 @@ You should see a similar output like the following:
 
 4. Create an Amazon S3 bucket where we will upload the build artifacts and the AWS SAM template. In the last step, we deploy the initial e-commerce application which will only take 2 minutes. Run the following commands:
 
-> **Replace BUCKET_NAME and YOUR_AWS_REGION with your concrete values.**
+> **Replace BUCKET_NAME, YOUR_AWS_REGION and YOUR_EMAIL_ADDRESS with your concrete values.**
 
 ```shell
 aws s3 mb s3://BUCKET_NAME --region YOUR_AWS_REGION
@@ -102,6 +102,7 @@ sam package \
 sam deploy \
     --template-file packaged.yaml \
     --stack-name step-functions-workshop \
+    --parameter-overrides EMail=YOUR_EMAIL_ADDRESS \
     --capabilities CAPABILITY_IAM \
     --region YOUR_AWS_REGION
 ```

@@ -29,6 +29,10 @@ Globals:
       project: aws-workshop
       session: Managing Long Lived Transactions with AWS Step Functions
 
+Parameters:
+    EMail:
+        Type: String
+
 Resources:
 
 ##          ###    ##     ## ########  ########     ###    
@@ -241,7 +245,7 @@ Resources:
     Type: AWS::SNS::Topic
     Properties: 
       Subscription:
-        - Endpoint: cmr@amazon.de
+        - Endpoint: !Ref EMail
           Protocol: email
         - Endpoint: !GetAtt SagaQueue.Arn
           Protocol: sqs

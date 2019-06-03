@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+
+Parameters:
+  EC2InstanceType:
+    Default: t2.micro
+    Description: EC2 instance type on which IDE runs
+    Type: String
+  AutoHibernateTimeout:
+    Default: 30
+    Description: How many minutes idle before shutting down the IDE
+    Type: Number
+
+
+Resources:
+  IDE:
+    Type: AWS::Cloud9::EnvironmentEC2
+    Properties:
+      Description: AWS Step Functions Workshop
+      AutomaticStopTimeMinutes:
+        Ref: AutoHibernateTimeout
+      InstanceType:
+        Ref: EC2InstanceType
+      Name:
+        Ref: AWS::StackName
+
+ #######  ##     ## ######## ########  ##     ## ########  ######  
+##     ## ##     ##    ##    ##     ## ##     ##    ##    ##    ## 
+##     ## ##     ##    ##    ##     ## ##     ##    ##    ##       
+##     ## ##     ##    ##    ########  ##     ##    ##     ######  
+##     ## ##     ##    ##    ##        ##     ##    ##          ## 
+##     ## ##     ##    ##    ##        ##     ##    ##    ##    ## 
+ #######   #######     ##    ##         #######     ##     ######  
+Outputs:
+
+  # IDE
+  IDEArn:
+    Description: "IDE ARN"
+    Value: !GetAtt IDE.Arn
