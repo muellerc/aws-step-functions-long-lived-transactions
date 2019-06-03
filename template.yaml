@@ -128,11 +128,11 @@ Resources:
         DefinitionString: !Sub |-
           {
             "Comment": "AWS Step Functions Workshop - Managing Long Lived Transactions with AWS Step Functions State Machine",
-            "StartAt": "ProcessOrder",
+            "StartAt": "CreateOrder",
             "TimeoutSeconds": 15,
             "States": {
               "ProcessOrder": {
-                "Comment": "First transaction to save the order and set the order status to new",
+                "Comment": "First transaction to create the order and set the order status to new",
                 "Type": "Pass",
                 "End": true
               }

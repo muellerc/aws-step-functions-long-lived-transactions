@@ -1,39 +1,39 @@
 {
-  "Comment": "re:Invent 2018 Builder Session - Managing Long Lived Transactions with AWS Step Functions State Machine",
-  "StartAt": "ProcessOrder",
+  "Comment": "AWS Step Functions Workshop - Managing Long Lived Transactions with AWS Step Functions State Machine",
+  "StartAt": "CreateOrder",
   "TimeoutSeconds": 15,
   "States": {
     "ProcessOrder": {
-      "Comment": "First transaction to save the order and set the order status to new",
+      "Comment": "First transaction to create the order and set the order status to new",
       "Type": "Task",
-      "Resource": "${NewOrderFunction.Arn}",
+      "Resource": "${CreateOrderFunction.Arn}",
       "TimeoutSeconds": 10,
       "Catch": [{
-        "ErrorEquals": ["ErrProcessOrder"],
+        "ErrorEquals": ["OrderCreationException"],
         "ResultPath": "$.error",
-        "Next": "UpdateOrderStatus"
+        "Next": "CancelOrder"
       }],
       "Next": "ProcessPayment"
     },
     "ProcessPayment": {
       "Comment": "Task processes the order payment",
       "Type": "Task",
-      "Resource": "${ProcessPaymentFunction.Arn}",
+      "Resource": "${PaymentProcessFunction.Arn}",
       "TimeoutSeconds": 10,
       "Catch": [{
-        "ErrorEquals": ["ErrProcessPayment"],
+        "ErrorEquals": ["PaymentProcessException"],
         "ResultPath": "$.error",
-        "Next": "ProcessRefund"
+        "Next": "RefundPayment"
       }],
       "Next": "ReserveInventory"
     },
     "ReserveInventory": {
       "Comment": "Task to reserve order items in inventory",
       "Type": "Task",
-      "Resource": "${ReserveInventoryFunction.Arn}",
+      "Resource": "${InventoryReserveFunction.Arn}",
       "TimeoutSeconds": 10,
       "Catch": [{
-        "ErrorEquals": ["ErrReserveInventory"],
+        "ErrorEquals": ["InventoryReservationException"],
         "ResultPath": "$.error",
         "Next": "ReleaseInventory"
       }],
@@ -55,7 +55,7 @@
     "ReleaseInventory": {
       "Comment": "Task to release order items back to inventory",
       "Type": "Task",
-      "Resource": "${ReleaseInventoryFunction.Arn}",
+      "Resource": "${InventoryReleaseFunction.Arn}",
       "TimeoutSeconds": 10,
       "Retry": [{
         "ErrorEquals": ["States.ALL"],
@@ -64,11 +64,11 @@
         "BackoffRate": 2.0
       }],
       "Catch": [{
-        "ErrorEquals": ["ErrReleaseInventory"],
+        "ErrorEquals": ["InventoryReleaseException"],
         "ResultPath": "$.error",
         "Next": "sns:NotifyReleaseInventoryFail"
       }],
-      "Next": "ProcessRefund"
+      "Next": "RefundPayment"
     },
     "sns:NotifyReleaseInventoryFail": {
       "Type": "Task",
@@ -80,10 +80,10 @@
       "ResultPath": "$.notification",
       "Next": "OrderFailed"
     },
-    "ProcessRefund": {
-      "Comment": "Task to process order refund",
+    "RefundPayment": {
+      "Comment": "Task to process payment refund",
       "Type": "Task",
-      "Resource": "${ProcessRefundFunction.Arn}",
+      "Resource": "${PaymentRefundFunction.Arn}",
       "TimeoutSeconds": 10,
       "Retry": [{
         "ErrorEquals": ["States.TaskFailed"],
@@ -92,13 +92,13 @@
         "BackoffRate": 2.0
       }],
       "Catch": [{
-        "ErrorEquals": ["ErrProcessRefund"],
+        "ErrorEquals": ["PaymentRefundException"],
         "ResultPath": "$.error",
-        "Next": "sns:NotifyProcessRefundFail"
+        "Next": "sns:NotifyRefundPaymentFail"
       }],
-      "Next": "UpdateOrderStatus"
+      "Next": "CancelOrder"
     },
-    "sns:NotifyProcessRefundFail": {
+    "sns:NotifyRefundPaymentFail": {
       "Type": "Task",
       "Resource": "arn:aws:states:::sns:publish",
       "Parameters": {
@@ -108,13 +108,13 @@
       "ResultPath": "$.notification",
       "Next": "OrderFailed"
     },
-    "UpdateOrderStatus": {
-      "Comment": "Task sets the order status to Pending.",
+    "CancelOrder": {
+      "Comment": "Task to cancel the order",
       "Type": "Task",
-      "Resource": "${UpdateOrderFunction.Arn}",
+      "Resource": "${OrderCancelationFunction.Arn}",
       "TimeoutSeconds": 10,
       "Catch": [{
-        "ErrorEquals": ["ErrUpdateOrderStatus"],
+        "ErrorEquals": ["OrderCancelationException"],
         "ResultPath": "$.error",
         "Next": "sns:NotifyUpdateOrderFail"
       }],
