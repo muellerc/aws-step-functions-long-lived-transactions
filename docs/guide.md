@@ -6,26 +6,84 @@ This is a sample template for Managing Long Lived Transactions with AWS Step Fun
 
 ``` bash
 .
-├── Makefile              <-- Make to automate build
-├── docs                  <-- Workshop guide and setup instructions
+├── pom.xml                                                     <-- Maven build file to automate the build
+├── docs                                                        <-- Workshop guide and setup instructions
 │   ├── guide.md
 │   └── setup.md
-├── inventory
-│   ├── release           <-- Lambda function code represents compensating transaction to release inventory
-│   └── reserve           <-- Lambda function code represents task to reserve order items from the inventory
-├── models                <-- Models package that defines the types used by the various functions and state data
-│   ├── inventory.go
-│   ├── order.go
-│   └── payment.go
-├── order                 <-- Lambda function code represents task to create a new order and set status to "new order"
-│   ├── new
-│   └── update
-├── payment
-│   ├── pay               <-- Lambda function code represents task to process financial transaction for the order
-│   └── refund            <-- Lambda function code represents the compensating transaction to refund customer order
-├── state-machine.json    <-- Sample saga implementation with Step Functions
-│                             [USE THIS AS A GUIDE IF YOU GET STUCK]
-└── template.yaml         <-- SAM template for defining and deploying serverless application resources
+├── models                                                      <-- Models package that defines the types used by the various functions and state data
+│   └── src
+|       └── main
+|           └── java
+|               └── com
+|                   └── aws
+|                       └── sample
+|                           └── cmr
+|                               └── stepfunctions
+│                                   ├── Inventory.java
+│                                   ├── Order.java
+|                                   └── Payment.java
+├── inventory-reservation
+│   └── src
+|       └── main
+|           └── java
+|               └── com
+|                   └── aws
+|                       └── sample
+|                           └── cmr
+|                               └── stepfunctions
+|                                   └── InventoryReservation.java   <-- Lambda function code represents task to reserve order items from the inventory
+├── inventory-release
+│   └── src
+|       └── main
+|           └── java
+|               └── com
+|                   └── aws
+|                       └── sample
+|                           └── cmr
+|                               └── stepfunctions
+|                                   └── InventoryRelease.java   <-- Lambda function code represents compensating transaction to release inventory
+├── order-creation
+│   └── src
+|       └── main
+|           └── java
+|               └── com
+|                   └── aws
+|                       └── sample
+|                           └── cmr
+|                               └── stepfunctions
+|                                   └── OrderCreation.java        <-- Lambda function code represents task to create a new order and set status to "new order"
+├── order-cancelation
+│   └── src
+|       └── main
+|           └── java
+|               └── com
+|                   └── aws
+|                       └── sample
+|                           └── cmr
+|                               └── stepfunctions
+|                                   └── OrderCancelation.java        <-- Lambda function code represents task to cancel an order
+├── payment-processing
+│   └── src
+|       └── main
+|           └── java
+|               └── com
+|                   └── aws
+|                       └── sample
+|                           └── cmr
+|                               └── stepfunctions
+|                                   └── PaymentProcessing.java     <-- Lambda function code represents task to process financial transaction for the order
+├── payment-refund
+│   └── src
+|       └── main
+|           └── java
+|               └── com
+|                   └── aws
+|                       └── sample
+|                           └── cmr
+|                               └── stepfunctions
+|                                   └── PaymentRefund.java      <-- Lambda function code represents the compensating transaction to refund customer order
+├── state-machine.json                                          <-- Sample saga implementation with Step Functions [USE THIS AS A GUIDE IF YOU GET STUCK]
+└── template.yaml                                               <-- SAM template for defining and deploying serverless application resources
 ```
 
 ## Amazon States Language

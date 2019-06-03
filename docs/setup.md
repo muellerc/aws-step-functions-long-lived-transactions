@@ -1,20 +1,19 @@
 # Setup Information
 
-## Using AWS CloudFormation (preferred)
+## Setup Your Development Environment Using AWS CloudFormation
 
-The easiest way to get started is to launch an AWS CloudFormation template that will deploy the resources for this workshop.
+The easiest way to get started is to launch an AWS CloudFormation template that will setup an AWS Cloud9 environment for you:.
 
 Region| Launch
 ------|-----
-US East (N. Virginia) | [![Launch in us-east-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?stackName=reinvent-builder-session-401&templateURL=https://s3.amazonaws.com/aws-step-functions-long-lived-transactions-us-east-1/builder-template.yaml)
-US West (Oregon) | [![Launch in us-west-2](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/create/review?stackName=reinvent-builder-session-401&templateURL=https://s3-us-west-2.amazonaws.com/aws-step-functions-long-lived-transactions-us-west-2/builder-template.yaml)
-Asia Pacific (Sydney) | [![Launch in ap-southeast-2](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-2#/stacks/create/review?stackName=reinvent-builder-session-401&templateURL=https://s3-ap-southeast-2.amazonaws.com/aws-step-functions-long-lived-transactions-ap-southeast-2/builder-template.yaml)
+EU Central (Frankfurt) | [![Launch in eu-central-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-central-1#/stacks/create/review?stackName=saga-pattern-workshop&templateURL=https://s3.amazonaws.com/aws-step-functions-long-lived-transactions-us-east-1/builder-template.yaml)
+
 
 ### CloudFormation Setup Instructions
 
 1. Click the **Launch Stack** link above for the region of your choice.
 
-1. Name the stack (or leave the default `reinvent-builder-session-401`)
+1. Name the stack (or leave the default `cloud9-dev-env`)
 
 1. In the Capabilities section acknowledge that CloudFormation will create IAM resources and click **Create**.
     ![Acknowledge IAM Screenshot](images/capabilities.png)
@@ -23,10 +22,9 @@ Asia Pacific (Sydney) | [![Launch in ap-southeast-2](http://docs.aws.amazon.com/
 
 1. Once the Change Set has been successfully created, select `Execute` to create the stack.
 
-</p></details>
 
 ## Deploy from Source
-Alternatively, you can deploy the source from you local development environment. Please note, this requires the following environment setup.
+After your AWS Cloud9 development environment is created successfully, connect to the server.
 
 <details>
 <summary><strong>Deploy from Source(expand for details)</strong></summary><p>

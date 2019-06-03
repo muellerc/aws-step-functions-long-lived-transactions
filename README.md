@@ -1,6 +1,6 @@
 # Managing Long Lived Transactions with AWS Step Functions
 
-AWS Step Functions is a fully managed Serverless workflow management service for managing long running processes and coordinating the components of distributed applications and microservices using visual workflows. But did you know it can also help you deal with the complexities of dealing with a long lived transaction across distributed components in your microservices architecture? In this Builder session, you will learn how AWS Step Function can help us implement the Saga design pattern.
+AWS Step Functions is a fully managed Serverless workflow management service for managing long running processes and coordinating the components of distributed applications and microservices using visual workflows. But did you know it can also help you deal with the complexities of dealing with a long lived transaction across distributed components in your microservices architecture? In this workshop, you will learn how AWS Step Function can help us implement the Saga design pattern.
 
 ## What problems are we trying to solve?
 
@@ -22,25 +22,36 @@ AWS Step Functions provide us with a mechanism for dealing with long-lived trans
 * allowing us to build our state machines using visual workflows
 * provides us with a way to manage state and deal with failure
 
-# Builder Session 
+# Workshop
 
 ## Scenario
 
 You are creating an e-commerce application and are processing an order. This requires you to update order status, process a credit card transaction and update inventory levels. Each state integrates with a different backend with its own local transaction. You need to treat these as a single, distributed transaction.
 
+## Start Point
+
+After you have successfully executed the [Setup](/docs/setup.md) step to get started, you deployed already all six Lambda functions which are necessary to implement our scenario. But the current workflow definition for our e-commerce application is far from complete:
+
+![Saga with Step Functions](docs/images/stepdiagram1.png)
+
+## Target
+
+Your target is to implement the Saga pattern for the the e-commerce application. The [Session Guide](/docs/guide.md) will assist you, to implement the following workflow:
+
 ![Saga with Step Functions](docs/images/stepdiagram2.png)
 
 ## Learning Objectives
 
-In this Builder Session, we will: 
+In this Workshop, we will: 
 
+* Using AWS SAM to package your e-commerce application and deploy all required AWS resources
 * Create a state machine that implements the Saga pattern
 * Understand how to use error handling and retry functionality using AWS Step Functions
-* Configure Task states to execute pre-provisioned AWS Lambda functions
+* Configure Task states to execute the pre-provisioned AWS Lambda functions
 
 ## Get Started!
 
-1. Read the [Setup Information](/docs/setup.md) to deploy the artefacts necessary to complete this session.
+1. Read the [Setup Information](/docs/setup.md) to deploy the artifacts necessary to complete this session.
 1. Use the [Session Guide](/docs/guide.md) to assist you as you create your saga implementation for the e-commerce application scenario.
 
 # License Summary
