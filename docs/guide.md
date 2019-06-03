@@ -121,7 +121,7 @@ Any state can encounter runtime errors. Errors can arise because of state machin
 ```json
 "Catch": [
   {
-    "ErrorEquals": ["OrderCreationException"],
+    "ErrorEquals": ["com.aws.sample.cmr.OrderCreationException"],
     "ResultPath": "$.error",
     "Next": "CancelOrder"
   }
@@ -141,7 +141,7 @@ When a	state reports an error, the interpreter scans through the Retriers and, w
   "BackoffRate": 2.0
   }],
   "Catch": [{
-    "ErrorEquals": ["InventoryReleaseException"],
+    "ErrorEquals": ["com.aws.sample.cmr.InventoryReleaseException"],
     "ResultPath": "$.error",
     "Next": "ReleaseInventoryFailed"
   }
@@ -152,12 +152,12 @@ When a	state reports an error, the interpreter scans through the Retriers and, w
 
 The following is a list of all the custom errors thrown by the application and can be used in your state machine.
 
-* `OrderCreationException` represents a process order creation error
-* `OrderCancelationException` represents a process order cancellation error
-* `PaymentProcessException` represents a process payment error
-* `PaymentRefundException` represents a process payment refund error
-* `InventoryReservationException` represents a inventory update error
-* `InventoryReleaseException` represents a inventory update reversal error
+* `com.aws.sample.cmr.OrderCreationException` represents a process order creation error
+* `com.aws.sample.cmr.OrderCancelationException` represents a process order cancellation error
+* `com.aws.sample.cmr.PaymentProcessException` represents a process payment error
+* `com.aws.sample.cmr.PaymentRefundException` represents a process payment refund error
+* `com.aws.sample.cmr.InventoryReservationException` represents a inventory update error
+* `com.aws.sample.cmr.InventoryReleaseException` represents a inventory update reversal error
 
 ## Testing Scenarios
 
