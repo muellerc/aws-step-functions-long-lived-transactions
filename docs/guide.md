@@ -184,7 +184,7 @@ The AWS CLI command will trigger a execution of your state machine. Make sure yo
 ``` bash
 aws stepfunctions start-execution \
     --state-machine-arn "arn:aws:states:[REGION]:[ACCOUNT NUMBER]:stateMachine:[STATEMACHINE-NAME]" \
-    --input "{\"order_id\": \"40063fe3-56d9-4c51-b91f-71929834ce03\", \"order_date\": \"2018-10-19T10:50:16+08:00\", \"customer_id\": \"8d04ea6f-c6b2-4422-8550-839a16f01feb\", \"items\": [{ \"item_id\": \"567\", \"qty\": 1.0, \"description\": \"Cart item 1\", \"unit_price\": 199.99 }]}" \
+    --input "{\"orderId\": \"40063fe3-56d9-4c51-b91f-71929834ce03\", \"orderDate\": \"2018-10-19T10:50:16+08:00\", \"customerId\": \"8d04ea6f-c6b2-4422-8550-839a16f01feb\", \"items\": [{ \"itemId\": \"567\", \"quantity\": 1.0, \"description\": \"Cart item 1\", \"unitPrice\": 199.99 }]}" \
     --region [AWS_REGION]
 ```
 

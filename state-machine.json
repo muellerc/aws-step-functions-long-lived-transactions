@@ -1,15 +1,15 @@
 {
   "Comment": "AWS Step Functions Workshop - Managing Long Lived Transactions with AWS Step Functions State Machine",
   "StartAt": "CreateOrder",
-  "TimeoutSeconds": 15,
+  "TimeoutSeconds": 60,
   "States": {
-    "ProcessOrder": {
+    "CreateOrder": {
       "Comment": "First transaction to create the order and set the order status to new",
       "Type": "Task",
       "Resource": "${OrderCreationFunction.Arn}",
-      "TimeoutSeconds": 10,
+      "TimeoutSeconds": 20,
       "Catch": [{
-        "ErrorEquals": ["OrderCreationException"],
+        "ErrorEquals": ["com.aws.sample.cmr.OrderCreationException"],
         "ResultPath": "$.error",
         "Next": "CancelOrder"
       }],
@@ -19,9 +19,9 @@
       "Comment": "Task processes the order payment",
       "Type": "Task",
       "Resource": "${PaymentProcessFunction.Arn}",
-      "TimeoutSeconds": 10,
+      "TimeoutSeconds": 20,
       "Catch": [{
-        "ErrorEquals": ["PaymentProcessException"],
+        "ErrorEquals": ["com.aws.sample.cmr.PaymentProcessException"],
         "ResultPath": "$.error",
         "Next": "RefundPayment"
       }],
@@ -31,9 +31,9 @@
       "Comment": "Task to reserve order items in inventory",
       "Type": "Task",
       "Resource": "${InventoryReserveFunction.Arn}",
-      "TimeoutSeconds": 10,
+      "TimeoutSeconds": 20,
       "Catch": [{
-        "ErrorEquals": ["InventoryReservationException"],
+        "ErrorEquals": ["com.aws.sample.cmr.InventoryReservationException"],
         "ResultPath": "$.error",
         "Next": "ReleaseInventory"
       }],
@@ -43,7 +43,7 @@
       "Type": "Task",
       "Resource": "arn:aws:states:::sns:publish",
       "Parameters": {
-        "Message.$": "$.order_id",
+        "Message.$": "$.orderId",
         "TopicArn": "${SagaTopic}"
       },
       "ResultPath": "$.notification",
@@ -56,7 +56,7 @@
       "Comment": "Task to release order items back to inventory",
       "Type": "Task",
       "Resource": "${InventoryReleaseFunction.Arn}",
-      "TimeoutSeconds": 10,
+      "TimeoutSeconds": 20,
       "Retry": [{
         "ErrorEquals": ["States.ALL"],
         "IntervalSeconds": 1,
@@ -64,7 +64,7 @@
         "BackoffRate": 2.0
       }],
       "Catch": [{
-        "ErrorEquals": ["InventoryReleaseException"],
+        "ErrorEquals": ["com.aws.sample.cmr.InventoryReleaseException"],
         "ResultPath": "$.error",
         "Next": "sns:NotifyReleaseInventoryFail"
       }],
@@ -74,17 +74,17 @@
       "Type": "Task",
       "Resource": "arn:aws:states:::sns:publish",
       "Parameters": {
-        "Message.$": "$.order_id",
+        "Message.$": "$.orderId",
         "TopicArn": "${SagaTopic}"
       },
       "ResultPath": "$.notification",
-      "Next": "OrderFailed"
+      "Next": "OrderCanceled"
     },
     "RefundPayment": {
       "Comment": "Task to process payment refund",
       "Type": "Task",
       "Resource": "${PaymentRefundFunction.Arn}",
-      "TimeoutSeconds": 10,
+      "TimeoutSeconds": 20,
       "Retry": [{
         "ErrorEquals": ["States.TaskFailed"],
         "IntervalSeconds": 1,
@@ -92,7 +92,7 @@
         "BackoffRate": 2.0
       }],
       "Catch": [{
-        "ErrorEquals": ["PaymentRefundException"],
+        "ErrorEquals": ["com.aws.sample.cmr.PaymentRefundException"],
         "ResultPath": "$.error",
         "Next": "sns:NotifyRefundPaymentFail"
       }],
@@ -102,35 +102,35 @@
       "Type": "Task",
       "Resource": "arn:aws:states:::sns:publish",
       "Parameters": {
-        "Message.$": "$.order_id",
+        "Message.$": "$.orderId",
         "TopicArn": "${SagaTopic}"
       },
       "ResultPath": "$.notification",
-      "Next": "OrderFailed"
+      "Next": "OrderCanceled"
     },
     "CancelOrder": {
       "Comment": "Task to cancel the order",
       "Type": "Task",
       "Resource": "${OrderCancelationFunction.Arn}",
-      "TimeoutSeconds": 10,
+      "TimeoutSeconds": 20,
       "Catch": [{
-        "ErrorEquals": ["OrderCancelationException"],
+        "ErrorEquals": ["com.aws.sample.cmr.OrderCancelationException"],
         "ResultPath": "$.error",
-        "Next": "sns:NotifyUpdateOrderFail"
+        "Next": "sns:NotifyCancelOrderFail"
       }],
-      "Next": "sns:NotifyUpdateOrderFail"
+      "Next": "OrderCanceled"
     },
-    "sns:NotifyUpdateOrderFail": {
+    "sns:NotifyCancelOrderFail": {
       "Type": "Task",
       "Resource": "arn:aws:states:::sns:publish",
       "Parameters": {
-        "Message.$": "$.order_id",
+        "Message.$": "$.orderId",
         "TopicArn": "${SagaTopic}"
       },
       "ResultPath": "$.notification",
-      "Next": "OrderFailed"
+      "Next": "OrderCanceled"
     },
-    "OrderFailed": {
+    "OrderCanceled": {
       "Type": "Fail"
     }
   }
