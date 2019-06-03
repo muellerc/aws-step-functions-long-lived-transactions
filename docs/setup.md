@@ -6,8 +6,8 @@ The easiest way to get started is to launch an AWS CloudFormation template that 
 
 Region| Launch
 ------|-----
-EU Central (Frankfurt) | [![Launch in eu-central-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-central-1#/stacks/create/review?stackName=aws-step-functions-workshop&templateURL=https://s3.amazonaws.com/aws-step-functions-workshop/cloud9.yaml)
-EU West (Dublin) | [![Launch in eu-west-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/create/review?stackName=aws-step-functions-workshop&templateURL=https://s3.amazonaws.com/aws-step-functions-workshop/cloud9.yaml)
+EU Central (Frankfurt) | [![Launch in eu-central-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-central-1#/stacks/create/review?stackName=cloud9-dev-env&templateURL=https://s3.amazonaws.com/aws-step-functions-workshop/cloud9.yaml)
+EU West (Dublin) | [![Launch in eu-west-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/create/review?stackName=cloud9-dev-env&templateURL=https://s3.amazonaws.com/aws-step-functions-workshop/cloud9.yaml)
 
 ### CloudFormation Setup Instructions
 

@@ -17,7 +17,7 @@ Resources:
   IDE:
     Type: AWS::Cloud9::EnvironmentEC2
     Properties:
-      Description: AWS Step Functions Workshop
+      Description: Cloud9 dev env
       AutomaticStopTimeMinutes:
         Ref: AutoHibernateTimeout
       InstanceType:
