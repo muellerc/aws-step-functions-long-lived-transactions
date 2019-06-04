@@ -135,7 +135,7 @@ Resources:
             "StartAt": "CreateOrder",
             "TimeoutSeconds": 60,
             "States": {
-              "ProcessOrder": {
+              "CreateOrder": {
                 "Comment": "First transaction to create the order and set the order status to new",
                 "Type": "Pass",
                 "End": true
