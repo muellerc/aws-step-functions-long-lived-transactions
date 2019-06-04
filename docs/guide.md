@@ -165,12 +165,12 @@ The AWS Step Functions implementation has been configured for you to be easily t
 
 OrderID Prefix | Will error with | Example | Expected execution
 ------------ | ------------- | --- | ---
-1 | OrderCreationException | 1ae4501d-ed92-4b27-bf0e-fd978ed45127 | ![1](images/paths-breakdown-1.png) 
-11 | OrderCancelationException | 11328abd-368d-43fd-bd4f-db15b5b63951 | ![11](images/paths-breakdown-11.png)
-2 | PaymentProcessException |  20b0b599-441b-45c3-910e-ad63fe992c43 | ![2](images/paths-breakdown-2.png)
-22 | PaymentRefundException | 222f741b-0292-4f93-a2f7-503f92486955 | ![22](images/paths-breakdown-22.png)
-3 | InventoryReservationException | 3a7dc768-6f32-495d-a140-3d330c246f50 | ![3](images/paths-breakdown-3.png)
-33 | InventoryReleaseException | 33a49007-a815-4079-9b9b-e30ae7eca11f | ![3](images/paths-breakdown-33.png)
+1 | com.aws.sample.cmr.OrderCreationException | 1ae4501d-ed92-4b27-bf0e-fd978ed45127 | ![1](images/paths-breakdown-1.png) 
+11 | com.aws.sample.cmr.OrderCancelationException | 11328abd-368d-43fd-bd4f-db15b5b63951 | ![11](images/paths-breakdown-11.png)
+2 | com.aws.sample.cmr.PaymentProcessException |  20b0b599-441b-45c3-910e-ad63fe992c43 | ![2](images/paths-breakdown-2.png)
+22 | com.aws.sample.cmr.PaymentRefundException | 222f741b-0292-4f93-a2f7-503f92486955 | ![22](images/paths-breakdown-22.png)
+3 | com.aws.sample.cmr.InventoryReservationException | 3a7dc768-6f32-495d-a140-3d330c246f50 | ![3](images/paths-breakdown-3.png)
+33 | com.aws.sample.cmr.InventoryReleaseException | 33a49007-a815-4079-9b9b-e30ae7eca11f | ![3](images/paths-breakdown-33.png)
 4-9 | No error | 47063fe3-56d9-4c51-b91f-71929834ce03 | ![4-9](images/paths-breakdown-7.png)
 
 ### Invoking your Step Function via CLI
